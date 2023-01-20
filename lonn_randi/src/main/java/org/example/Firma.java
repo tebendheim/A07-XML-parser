@@ -106,8 +106,8 @@ public class Firma {
     public String toString(){
 //        String strengen = String.format("%s, %s\n", navn, orgnr);
 
-        String strengen = String.format("Ansatt nr, Lønnart nr, Dato, antall, Sats, Beskrivelse, Prosjektnr, avdelingsnr");
-                strengen = strengen + String.format("Ansatt nr, personnummer, Lønnsart nr, dato, Antall, Sats, Beskrivelse (Fordel; skatteTrekk; Aga)");
+        String strengen = String.format("Ansatt nr, Lønnart nr, Dato, antall, Sats, Beskrivelse, Prosjektnr, avdelingsnr\n");
+                strengen = strengen + String.format("Ansatt nr, personnummer, Lønnsart nr, dato, Antall, Sats, Beskrivelse (Fordel; skatteTrekk; Aga)\n");
 
         Map<String, Lønnsmottaker> map = new HashMap<>(lMottakere);
         for (Map.Entry<String, Lønnsmottaker> set: map.entrySet()){
