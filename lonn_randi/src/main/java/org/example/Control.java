@@ -13,12 +13,13 @@ public class Control {
     public Control(GUI gui){
 
     }
-    public void kjorFirma(File fil){
+    public String kjorFirma(File orginalFil, File nyFil){
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        String utskrift = null;
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            Document doc = builder.parse(fil);
+            Document doc = builder.parse(orginalFil);
 
             doc.getDocumentElement().normalize();
             NodeList oppgaver = doc.getElementsByTagName("oppgave");
@@ -34,9 +35,11 @@ public class Control {
 
 //            gui.showPrint(firma.toString());
          System.out.println(firma);
+         utskrift =  firma.skrivTilFil(nyFil);
 //
         } catch (Exception e) {
             System.out.println(e);
         }
+        return utskrift;
     }
 }

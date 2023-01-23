@@ -4,6 +4,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,12 +105,23 @@ public class Firma {
         }
         System.out.println(totaler);
     }
+    public String skrivTilFil(File fil){
+        String strengen = "data er skrevet til fil";
+        try{
+            fil.createNewFile();
+            FileWriter writer = new FileWriter(fil);
+            writer.append(this.toString());
+        }catch (IOException e){
+            return "Error, could not write to file";
+        }
+        return strengen;
+    }
     @Override
     public String toString(){
 //        String strengen = String.format("%s, %s\n", navn, orgnr);
 
-        String strengen = String.format("Ansatt nr, Lønnart nr, Dato, antall, Sats, Beskrivelse, Prosjektnr, avdelingsnr\n");
-                strengen = strengen + String.format("Ansatt nr, personnummer, Lønnsart nr, dato, Antall, Sats, Beskrivelse (Fordel; skatteTrekk; Aga)\n");
+        String strengen = String.format("Ansatt nr; Lønnart nr; Dato; antall; Sats; Beskrivelse; Prosjektnr; avdelingsnr\n");
+                strengen = strengen + String.format("Ansatt nr; personnummer; Lønnsart nr; dato; Antall; Sats; Beskrivelse (Fordel, skatteTrekk, Aga);Total\n");
 
         Map<String, Lønnsmottaker> map = new HashMap<>(lMottakere);
         for (Map.Entry<String, Lønnsmottaker> set: map.entrySet()){

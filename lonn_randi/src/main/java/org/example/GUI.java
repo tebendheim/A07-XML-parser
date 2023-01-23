@@ -11,6 +11,8 @@ public class GUI extends JFrame implements ActionListener {
     private File chosenFile =null;
     private Control control = new Control(this);
     private JLabel path;
+    private File newFile = null;
+
     public GUI(){
         super("File Chooser");
         setLayout(new FlowLayout());
@@ -36,8 +38,31 @@ public class GUI extends JFrame implements ActionListener {
             if (returnValue==JFileChooser.APPROVE_OPTION){
                 chosenFile= fileChooser.getSelectedFile();
                 JOptionPane.showMessageDialog(this, "You hava chosen: " + chosenFile.getAbsolutePath());
-                path.setText("You hava chosen: " + chosenFile.getAbsolutePath());
-                System.out.println(chosenFile.getAbsolutePath());
+                String fileName = chosenFile.getName();
+                String filePath = chosenFile.getAbsolutePath();
+                path.setText("You hava chosen: " + fileName);
+                int dotIndex = filePath.lastIndexOf(".");
+                String newFileName = null;
+                if (dotIndex >=0){
+                    newFileName = filePath.substring(0, dotIndex)+"_for_import.csv";
+                }else {
+                    newFileName = filePath+"_for_import.csv";
+                }
+
+                newFile = new File(newFileName);
+                boolean check = true;
+                while (check){
+                    path.setText(newFileName);
+                    if (newFile.exists()){
+                        dotIndex = newFileName.lastIndexOf(".");
+                        newFileName = newFileName.substring(0,dotIndex)+"1.csv";
+                        newFile = new File(newFileName);
+                    }else{
+                        check = false;
+                    }
+                }
+
+
 //                try{
 
 
@@ -45,11 +70,12 @@ public class GUI extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Error creating new file");
             }
         }else if (e.getSource()==runButton){
-            if (chosenFile==null){
+            if (chosenFile==null || newFile == null){
                 JOptionPane.showMessageDialog(this, "Du må velge en fil først.");
 
             }else{
-                control.kjorFirma(chosenFile);
+                String utskrift = control.kjorFirma(chosenFile, newFile);
+                path.setText(utskrift);
             }
         }
     }

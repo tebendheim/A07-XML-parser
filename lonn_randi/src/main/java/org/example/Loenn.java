@@ -86,11 +86,11 @@ public class Loenn {
         if (antall != 0){
             oppdaterSats();
 //            @Todo: legg inn sats.
-            strengen = strengen + String.format(",%s,,,%s,%s,%s (%s; %s; %s),%s", id, antall, sats, beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, totalSum);
+            strengen = strengen + String.format(";%s;;;%s;%s;%s (%s, %s, %s);%s", id, antall, sats, beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, totalSum);
 
         }else {
 //            @Todo: bruk totalsum og sett antall til 1:
-            strengen = strengen + String.format(",%s,,,%s,%s,%s (%s; %s; %s),%s", id, 1, totalSum, beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, totalSum);
+            strengen = strengen + String.format(";%s;;;%s;%s;%s (%s, %s, %s);%s", id, 1, totalSum, beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, totalSum);
         }
         return strengen;
     }
