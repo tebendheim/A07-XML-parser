@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+import static java.awt.event.WindowEvent.WINDOW_CLOSING;
+
 public class GUI extends JFrame implements ActionListener {
     private JButton openButton, runButton;
     private File chosenFile =null;
@@ -17,17 +19,35 @@ public class GUI extends JFrame implements ActionListener {
     public GUI(){
         super("File Chooser");
         setLayout(new FlowLayout());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new FlowLayout());
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new FlowLayout());
+        panel2.setBackground(Color.white);
+
+        panel.add(panel1);
+        panel.add(panel2);
         openButton = new JButton("Open");
-        add(openButton);
+        panel1.add(openButton);
         runButton = new JButton("Kjør");
-        add(runButton);
+        panel1.add(runButton);
         path = new JLabel();
-        add(path);
+        panel2.add(path);
+
         openButton.addActionListener(this);
         runButton.addActionListener(this);
-        setSize(300, 200);
+        add(panel);
+
+        setSize(600, 400);
         setVisible(true);
+
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
     public void showPrint(String print){
         JOptionPane.showMessageDialog(this, print);
