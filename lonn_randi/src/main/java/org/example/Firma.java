@@ -16,9 +16,11 @@ public class Firma {
     String navn;
     String orgnr;
     HashMap<String, Double> totaler = new HashMap<>();
-    public Firma(String navn, String orgnr){
+    Control kontroll;
+    public Firma(String navn, String orgnr, Control kontroll){
         this.navn = navn;
         this.orgnr = orgnr;
+        this.kontroll = kontroll;
     }
 
     public void leggTilMottaker(Lønnsmottaker m){
@@ -108,9 +110,10 @@ public class Firma {
     public String skrivTilFil(File fil){
         String strengen = "data er skrevet til fil";
         try{
-            fil.createNewFile();
             FileWriter writer = new FileWriter(fil);
-            writer.append(this.toString());
+            writer.write(this.toString());
+            writer.close();
+            kontroll.settDialog("Skrevet til fil");
         }catch (IOException e){
             return "Error, could not write to file";
         }

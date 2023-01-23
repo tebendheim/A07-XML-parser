@@ -9,10 +9,16 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
         GUI gui = new GUI();
+       // String filnavn = "Nyfil.csv";
+       // FileWriter skriver = new FileWriter(new File(filnavn));
+       // skriver.write("dette er en test");
     }
 
 //    @Check: alternativ main:

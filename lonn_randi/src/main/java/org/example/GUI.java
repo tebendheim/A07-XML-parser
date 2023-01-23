@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 public class GUI extends JFrame implements ActionListener {
     private JButton openButton, runButton;
@@ -74,10 +75,20 @@ public class GUI extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Du må velge en fil først.");
 
             }else{
-                String utskrift = control.kjorFirma(chosenFile, newFile);
-                path.setText(utskrift);
+                try{
+                    boolean nyFil= newFile.createNewFile();
+
+                }catch (IOException err){
+                    JOptionPane.showMessageDialog(this,"Kunne ikke lage ny fil");
+                }
+
+
+                control.kjorFirma(chosenFile, newFile);
             }
         }
+    }
+    public void setDialog(String dialog){
+        JOptionPane.showMessageDialog(this, dialog);
     }
 
 
