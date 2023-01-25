@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Firma {
     HashMap<String,Lønnsmottaker> lMottakere = new HashMap<>();
@@ -17,10 +18,14 @@ public class Firma {
     String orgnr;
     HashMap<String, Double> totaler = new HashMap<>();
     Control kontroll;
-    public Firma(String navn, String orgnr, Control kontroll){
-        this.navn = navn;
-        this.orgnr = orgnr;
+    public Firma(Control kontroll){
         this.kontroll = kontroll;
+    }
+    public void settOrgNr(String nr){
+        orgnr = nr;
+    }
+    public void settNavn(String navn){
+        this.navn = navn;
     }
 
     public void leggTilMottaker(Lønnsmottaker m){
@@ -35,13 +40,13 @@ public class Firma {
 
 //    @Todo: må oppdatere slik at denne benytter lønnsmottaker sin legg tiul metode.
 
-    public void lesFraNodeList(NodeList alleMottakere) {
+    public void lesFraNodeList(NodeList alleMottakere, String dato) {
         for (int i = 0; i < alleMottakere.getLength(); i++) {
             Element mottaker = (Element) alleMottakere.item(i);
             String id = mottaker.getElementsByTagName("norskIdentifikator").item(0).getTextContent();
             NodeList inntekter = mottaker.getElementsByTagName("inntekt");
-            Lønnsmottaker loennsmottaker = new Lønnsmottaker(id);
-
+            Lønnsmottaker loennsmottaker = new Lønnsmottaker(id, dato);
+            lMottakere.put(id, loennsmottaker);
             for (int j = 0; j < inntekter.getLength(); j++) {
 //                @Todo: Må hente ut antall for hver lønn og oppdatere det. Husk at antall kan være null.
                 Element inntekt = (Element) inntekter.item(j);
@@ -52,34 +57,17 @@ public class Firma {
                 boolean utAga = Boolean.parseBoolean(inntekt.getElementsByTagName("utloeserArbeidsgiveravgift").item(0).getTextContent());
                 boolean trekk = Boolean.parseBoolean(inntekt.getElementsByTagName("inngaarIGrunnlagForTrekk").item(0).getTextContent());
 
-//               Lager en instans av Loenn.
-                Loenn loenn = new Loenn(beskrivelse, fordel, trekk, utAga, id);
+                Loenn loenn = new Loenn(beskrivelse, fordel, trekk, utAga, dato, loennsmottaker);
                 loenn.okSum(beloep);
                 try{
                     double antall = Double.parseDouble(inntekt.getElementsByTagName("antall").item(0).getTextContent());
                     loenn.okAntall(antall);
                 }catch(NullPointerException e){
                 }
-
-
-
                 loennsmottaker.leggTilLoenn(loenn);
-
-                if (id.equals("30050197138")){
-                    System.out.println("nå");
-                }
-//                loennsmottaker.leggTilBesk(beskrivelse, beloep);
-//                loennsmottaker.leggTilFordel(fordel, beloep);
-////
             }
-
-
-
             Element elem = (Element) mottaker.getElementsByTagName("forskuddstrekk").item(0);
-
-
             if (elem == null){
-//                System.out.printf("Er null %s", id);
             }else{
                 Node beloepNode =elem.getElementsByTagName("beloep").item(0);
                 double beloep = Double.parseDouble(beloepNode.getTextContent());
@@ -90,7 +78,7 @@ public class Firma {
             lMottakere.put(id, loennsmottaker);
 
         }
-        System.out.println(this);
+        //System.out.println(this);
     }
     public void settOverordnet(Element o) {
         NodeList alleInntekt = o.getElementsByTagName("inntekt");
@@ -105,7 +93,7 @@ public class Firma {
                 totaler.put(type, sum);
             }
         }
-        System.out.println(totaler);
+
     }
     public String skrivTilFil(File fil){
         String strengen = "data er skrevet til fil";
@@ -123,8 +111,8 @@ public class Firma {
     public String toString(){
 //        String strengen = String.format("%s, %s\n", navn, orgnr);
 
-        String strengen = String.format("Ansatt nr; Lønnart nr; Dato; antall; Sats; Beskrivelse; Prosjektnr; avdelingsnr\n");
-                strengen = strengen + String.format("Ansatt nr; personnummer; Lønnsart nr; dato; Antall; Sats; Beskrivelse (Fordel, skatteTrekk, Aga);Total\n");
+        String strengen = String.format("Ansatt nr; personnummer; Lønnsart nr; dato; Antall; Sats; Beskrivelse (Fordel, skatteTrekk, Aga);Total\n");
+        strengen = strengen + String.format("Ansatt nr; ; Lønnart nr; Dato; antall; Sats; Beskrivelse; ; Prosjektnr; avdelingsnr\n") ;
 
         Map<String, Lønnsmottaker> map = new HashMap<>(lMottakere);
         for (Map.Entry<String, Lønnsmottaker> set: map.entrySet()){
@@ -132,5 +120,13 @@ public class Firma {
             strengen = strengen + m.toString();
         }
         return strengen;
+    }
+    public Set<String> hentID(){
+        System.out.println(lMottakere);
+        return lMottakere.keySet();
+    }
+    public void settAnsattNr(String id, String nr){
+        Lønnsmottaker mottaker = lMottakere.get(id);
+        mottaker.settAnsattnr(nr);
     }
 }

@@ -10,13 +10,15 @@ public class Loenn {
     private double totalSum = 0;
 
     private double sats = 0;
-    private String id;
-    public Loenn(String besk, String fordel, boolean gTrekk, boolean uAga, String id){
+    private String dato;
+    private Lønnsmottaker mottaker;
+    public Loenn(String besk, String fordel, boolean gTrekk, boolean uAga, String dato, Lønnsmottaker mottaker){
         beskrivelse = besk;
         this.fordel = fordel;
         inngaariGrunnlagForTrekk = gTrekk;
         utloeserAga = uAga;
-        this.id = id;
+        this.dato = dato;
+        this.mottaker = mottaker;
     }
     public void okSum(double sum){
         totalSum += sum;
@@ -86,11 +88,11 @@ public class Loenn {
         if (antall != 0){
             oppdaterSats();
 //            @Todo: legg inn sats.
-            strengen = strengen + String.format(";%s;;;%s;%s;%s (%s, %s, %s);%s", id, antall, sats, beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, totalSum);
+            strengen = strengen + String.format("%s;%s;;%s;%s;%s;%s (%s, %s, %s);%s",mottaker.hentAnsattNr(), "'"+mottaker.hentId(), dato, Double.toString(antall).replace(".",","), Double.toString(sats).replace(".",","), beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, Double.toString(totalSum).replace(".",","));
 
         }else {
 //            @Todo: bruk totalsum og sett antall til 1:
-            strengen = strengen + String.format(";%s;;;%s;%s;%s (%s, %s, %s);%s", id, 1, totalSum, beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, totalSum);
+            strengen = strengen + String.format("%s;%s;;%s;%s;%s;%s (%s, %s, %s);%s",mottaker.hentAnsattNr(), "'"+mottaker.hentId(),dato, "1", Double.toString(totalSum).replace(".",","), beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, Double.toString(totalSum).replace(".",","));
         }
         return strengen;
     }

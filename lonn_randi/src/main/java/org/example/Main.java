@@ -40,10 +40,10 @@ public class Main {
 //            NodeList alleInntekt = oppgave.getElementsByTagName("inntekt");
 //
 ////            gui.showPrint(firma.toString());
-//            System.out.println(firma);
+
 ////
 //        } catch (Exception e) {
-//            System.out.println(e);
+//
 //        }
 //    }
 }
