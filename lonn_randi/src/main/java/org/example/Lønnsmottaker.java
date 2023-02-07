@@ -60,7 +60,7 @@ public class Lønnsmottaker {
         }
 
         //        String strengen = String.format("Ansatt nr, personnummer, Lønnsart nr, dato, Antall, Sats, Beskrivelse (Fordel, skatteTrekk, Aga), Total sum");
-        strengen = strengen + String.format("%s;%s;;%s;1;%s;Forskuddstrekk (Skattetrekk,false,false); %s\n",ansattNr, "'"+id, dato,  Double.toString(forskuddstrekk).replace(".",","), Double.toString(forskuddstrekk).replace(".",","));
+//        strengen = strengen + String.format("%s;%s;;%s;1;%s;Forskuddstrekk (Skattetrekk,false,false); %s\n",ansattNr, "'"+id, dato,  Double.toString(forskuddstrekk).replace(".",","), Double.toString(forskuddstrekk).replace(".",","));
         return strengen;
     }
 

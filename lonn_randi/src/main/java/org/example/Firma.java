@@ -17,6 +17,7 @@ public class Firma {
     String navn;
     String orgnr;
     HashMap<String, Double> totaler = new HashMap<>();
+    ArrayList<Loennsart> arter = new ArrayList<>();
     Control kontroll;
     public Firma(Control kontroll){
         this.kontroll = kontroll;
@@ -56,8 +57,18 @@ public class Firma {
                 String beskrivelse = inntekt.getElementsByTagName("beskrivelse").item(0).getTextContent();
                 boolean utAga = Boolean.parseBoolean(inntekt.getElementsByTagName("utloeserArbeidsgiveravgift").item(0).getTextContent());
                 boolean trekk = Boolean.parseBoolean(inntekt.getElementsByTagName("inngaarIGrunnlagForTrekk").item(0).getTextContent());
-
-                Loenn loenn = new Loenn(beskrivelse, fordel, trekk, utAga, dato, loennsmottaker);
+                Loennsart nyArt = new Loennsart(beskrivelse,fordel,trekk, utAga);
+                boolean iArter = false;
+                for (Loennsart a: arter){
+                    if (nyArt.equals(a)){
+                        nyArt = a;
+                        iArter = true;
+                    }
+                }
+                if (!iArter){
+                    arter.add(nyArt);
+                }
+                Loenn loenn = new Loenn(nyArt, dato, loennsmottaker);
                 loenn.okSum(beloep);
                 try{
                     double antall = Double.parseDouble(inntekt.getElementsByTagName("antall").item(0).getTextContent());
@@ -71,8 +82,20 @@ public class Firma {
             }else{
                 Node beloepNode =elem.getElementsByTagName("beloep").item(0);
                 double beloep = Double.parseDouble(beloepNode.getTextContent());
-                loennsmottaker.leggTilForskuddstrekk(beloep);
-
+                Loennsart artForskuddstrekk = new Loennsart("forskuddstrekk", "Skattetrekk", false, false);
+                boolean iArter = false;
+                for (Loennsart a: arter){
+                    if (artForskuddstrekk.equals(a)){
+                        artForskuddstrekk = a;
+                        iArter = true;
+                    }
+                }
+                if (!iArter){
+                    arter.add(artForskuddstrekk);
+                }
+                Loenn forskuddstrekk = new Loenn(artForskuddstrekk, dato, loennsmottaker);
+                forskuddstrekk.okSum(beloep);
+                loennsmottaker.leggTilLoenn(forskuddstrekk);
             }
 
             lMottakere.put(id, loennsmottaker);

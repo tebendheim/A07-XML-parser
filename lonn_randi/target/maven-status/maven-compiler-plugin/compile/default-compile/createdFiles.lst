@@ -1,6 +1,7 @@
 org/example/GUI.class
 org/example/Main.class
 org/example/Lønnsmottaker.class
+org/example/Loennsart.class
 org/example/Arbeidsgiveravgift.class
 org/example/Firma.class
 org/example/Loenn.class

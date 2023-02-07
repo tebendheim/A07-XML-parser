@@ -18,7 +18,7 @@ public class Control {
     public Control(GUI gui){
         this.gui = gui;
     }
-    public void kjorFirma(File orginalFil, File nyFil, String dato){
+    public void kjorFirma(File orginalFil, String dato){
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         String utskrift = null;
         try {

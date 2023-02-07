@@ -1,22 +1,17 @@
 package org.example;
 
 public class Loenn {
-    private String beskrivelse;
-    private String fordel;
+    Loennsart art;
+
     private double antall = 0;
-    private boolean inngaariGrunnlagForTrekk;
-    private boolean utloeserAga;
 
     private double totalSum = 0;
 
     private double sats = 0;
     private String dato;
     private Lønnsmottaker mottaker;
-    public Loenn(String besk, String fordel, boolean gTrekk, boolean uAga, String dato, Lønnsmottaker mottaker){
-        beskrivelse = besk;
-        this.fordel = fordel;
-        inngaariGrunnlagForTrekk = gTrekk;
-        utloeserAga = uAga;
+    public Loenn(Loennsart loennsart, String dato, Lønnsmottaker mottaker){
+        art = loennsart;
         this.dato = dato;
         this.mottaker = mottaker;
     }
@@ -37,16 +32,16 @@ public class Loenn {
         antall -= sum;
     }
     public String hentBeskrivelse(){
-        return beskrivelse;
+        return art.hentBeskrivelse();
     }
     public String hentFordel(){
-        return fordel;
+        return art.hentFordel();
     }
     public boolean hentTrekk(){
-        return inngaariGrunnlagForTrekk;
+        return art.hentTrekk();
     }
     public boolean hentAga(){
-        return utloeserAga;
+        return art.hentAga();
     }
     public double hentTotalSum(){
         return totalSum;
@@ -60,6 +55,12 @@ public class Loenn {
             antall += nyLoenn.hentAntall();
         }
     }
+    public Lønnsmottaker hentMottaker(){
+        return mottaker;
+    }
+    public Loennsart hentArt(){
+        return art;
+    }
 
     @Override
     public boolean equals(Object o){
@@ -67,14 +68,11 @@ public class Loenn {
             return false;
         }
         Loenn objekt = (Loenn) o;
-        String oBesk = objekt.hentBeskrivelse();
-        String oFordel = objekt.hentFordel();
-        boolean oAga = objekt.hentAga();
-        boolean oTrekk = objekt.hentTrekk();
 
-        if (oAga == utloeserAga && oTrekk == inngaariGrunnlagForTrekk && fordel.equals(oFordel) && beskrivelse.equals(oBesk)){
+        if (mottaker.equals(objekt.hentMottaker()) &&  art.equals(objekt.hentArt())){
             return true;
         }
+
         return false;
     }
 //    @Todo: Husk å endre denne slik at linjene blir riktig med skjemaet.
@@ -88,11 +86,11 @@ public class Loenn {
         if (antall != 0){
             oppdaterSats();
 //            @Todo: legg inn sats.
-            strengen = strengen + String.format("%s;%s;;%s;%s;%s;%s (%s, %s, %s);%s",mottaker.hentAnsattNr(), "'"+mottaker.hentId(), dato, Double.toString(antall).replace(".",","), Double.toString(sats).replace(".",","), beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, Double.toString(totalSum).replace(".",","));
+            strengen = strengen + String.format("%s;%s;%s;%s;%s;%s;%s (%s, %s, %s);%s",mottaker.hentAnsattNr(), "'"+mottaker.hentId(), art.hentArt(), dato, Double.toString(antall).replace(".",","), Double.toString(sats).replace(".",","), art.hentBeskrivelse(), art.hentFordel(), art.hentTrekk(), art.hentAga(), Double.toString(totalSum).replace(".",","));
 
         }else {
 //            @Todo: bruk totalsum og sett antall til 1:
-            strengen = strengen + String.format("%s;%s;;%s;%s;%s;%s (%s, %s, %s);%s",mottaker.hentAnsattNr(), "'"+mottaker.hentId(),dato, "1", Double.toString(totalSum).replace(".",","), beskrivelse, fordel, inngaariGrunnlagForTrekk, utloeserAga, Double.toString(totalSum).replace(".",","));
+            strengen = strengen + String.format("%s;%s;%s;%s;%s;%s;%s (%s, %s, %s);%s",mottaker.hentAnsattNr(), "'"+mottaker.hentId(), art.hentArt(), dato, "1", Double.toString(totalSum).replace(".",","), art.hentBeskrivelse(), art.hentFordel(), art.hentTrekk(), art.hentAga(), Double.toString(totalSum).replace(".",","));
         }
         return strengen;
     }

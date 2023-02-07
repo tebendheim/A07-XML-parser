@@ -104,6 +104,7 @@ public class GUI extends JFrame implements ActionListener {
             //kjor();}
 
         }else if (e.getSource()==skrivButton){
+            nyFil();
             if (opened && newFile != null){
                 control.skrivTilFil(newFile);
 
@@ -125,15 +126,10 @@ public class GUI extends JFrame implements ActionListener {
     public void kjor() {
 
         String datoText = dato.getText();
-        if (chosenFile == null || newFile == null) {
+        if (chosenFile == null) {
             JOptionPane.showMessageDialog(this, "Du må velge en fil først.");
         } else {
-            try {
-                boolean nyFil = newFile.createNewFile();
-            } catch (IOException err) {
-                JOptionPane.showMessageDialog(this, "Kunne ikke lage ny fil");
-            }
-            control.kjorFirma(chosenFile, newFile, datoText);
+            control.kjorFirma(chosenFile, datoText);
 
             Set<String> id = control.hentPersonnummer();
             model = new DefaultTableModel();
@@ -177,33 +173,11 @@ public class GUI extends JFrame implements ActionListener {
                 String fileName = chosenFile.getName();
                 String filePath = chosenFile.getAbsolutePath();
                 path.setText("You hava chosen: " + fileName);
-                int dotIndex = filePath.lastIndexOf(".");
-                String newFileName = null;
-                if (dotIndex >= 0) {
-                    newFileName = filePath.substring(0, dotIndex) + "_for_import.csv";
-                } else {
-                    newFileName = filePath + "_for_import.csv";
-                }
-
-                newFile = new File(newFileName);
-                boolean check = true;
-                while (check) {
-                    path.setText(newFileName);
-                    if (newFile.exists()) {
-                        dotIndex = newFileName.lastIndexOf(".");
-                        newFileName = newFileName.substring(0, dotIndex) + "1.csv";
-                        newFile = new File(newFileName);
-                    } else {
-                        check = false;
-                    }
-                }
+//                nyFil();
                 if (chosenFile == null) {
                     opened = false;
                 }
                 return true;
-
-                //                try{
-
             } else if (JOptionPane.NO_OPTION == conf || JOptionPane.CANCEL_OPTION == conf) {
                 path.setText("No file is chosen");
                 opened = false;
@@ -215,6 +189,38 @@ public class GUI extends JFrame implements ActionListener {
         settEmptyTabell();
         return false;
 
+    }
+    public File nyFil(){
+        if (newFile == null){
+            String fileName = chosenFile.getName();
+            String filePath = chosenFile.getAbsolutePath();
+            path.setText("You hava chosen: " + fileName);
+            int dotIndex = filePath.lastIndexOf(".");
+            String newFileName = null;
+            if (dotIndex >= 0) {
+                newFileName = filePath.substring(0, dotIndex) + "_for_import.csv";
+            } else {
+                newFileName = filePath + "_for_import.csv";
+            }
+            newFile = new File(newFileName);
+            boolean check = true;
+            while (check) {
+                path.setText(newFileName);
+                if (newFile.exists()) {
+                    dotIndex = newFileName.lastIndexOf(".");
+                    newFileName = newFileName.substring(0, dotIndex) + "1.csv";
+                    newFile = new File(newFileName);
+                } else {
+                    check = false;
+                }
+            }
+            try {
+                boolean nyFil = newFile.createNewFile();
+            } catch (IOException err) {
+                JOptionPane.showMessageDialog(this, "Kunne ikke lage ny fil");
+            }
+        }
+        return newFile;
     }
     public void setDialog(String dialog){
         JOptionPane.showMessageDialog(this, dialog);
